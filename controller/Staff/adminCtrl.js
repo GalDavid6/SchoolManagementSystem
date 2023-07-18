@@ -1,8 +1,6 @@
 const AsyncHandler = require("express-async-handler");
-const bcrypt = require("bcryptjs");
 const Admin = require("../../model/Staff/Admin");
 const generateToken = require("../../utills/generateToken");
-const verifyToken = require("../../utills/verifyToken");
 const { hashPassword, isPassMatched } = require("../../utills/helpers");
 
 
@@ -33,19 +31,19 @@ exports.registerAdminCtrl = AsyncHandler(async (req, res)=>{
 //@route POST /api/admins/login
 //@access Private
 exports.loginAdminCtrl = AsyncHandler(async (req, res)=>{
-    const { email, password } = req.body;
-        //find user
-        const user = await Admin.findOne({email});
-        if(!user){
-            return res.json({message: "User not found"});
+    const { name, email, password } = req.body;
+        //find admin
+        const admin = await Admin.findOne({ name, email });
+        if(!admin){
+            return res.json({message: "Admin not found"});
         }
         //verify password
-        const isMatched = await isPassMatched(password, user.password);
+        const isMatched = await isPassMatched(password, admin.password);
         if(!isMatched){
             return res.json({ message: "Invalid login crendentials"});
         } else{
             return res.json({
-                data: generateToken(user._id),
+                data: generateToken(admin._id),
                 message: "Admin logged in successfully",
             });
         }
@@ -82,7 +80,7 @@ exports.getAdminProfileCtrl = AsyncHandler(async (req, res)=>{
 }) ;
 
 //desc update admin
-//@route UPDATE /api/v1/admins/:id
+//@route UPDATE /api/v1/admins/
 //@access Private
 exports.updateAdminCtrl = AsyncHandler(async (req, res)=>{
     const { email, name, password } = req.body;
@@ -91,7 +89,7 @@ exports.updateAdminCtrl = AsyncHandler(async (req, res)=>{
     if (emailExist){
         throw new Error("This email is taken/exist");
     } 
-    //check if user is updating password
+    //check if admin is updating password
     if(password){
         //update
         const admin = await Admin.findByIdAndUpdate(

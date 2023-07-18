@@ -23,7 +23,7 @@ adminRouter.post("/register",registerAdminCtrl);
 adminRouter.post("/login", loginAdminCtrl);
 
 // get all
-adminRouter.get("/", isLogin, getAdminsCtrl);
+adminRouter.get("/", isLogin, isAdmin, getAdminsCtrl);
 
 // get profile
 adminRouter.get("/profile", isLogin, isAdmin, getAdminProfileCtrl);

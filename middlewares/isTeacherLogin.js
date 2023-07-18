@@ -1,8 +1,7 @@
-const Admin = require("../model/Staff/Admin");
 const Teacher = require("../model/Staff/Teacher");
 const verifyToken = require("../utills/verifyToken");
 
-const isLogin = async (req, res, next) =>{
+const isTeacherLogin = async (req, res, next) =>{
     // get token from header
     const headerObj = req.headers;
     const token = headerObj?.authorization?.split(" ")[1]; // ? before . mean Optinal chaining 
@@ -22,4 +21,4 @@ const isLogin = async (req, res, next) =>{
     }
 };
 
-module.exports = isLogin;
+module.exports = isTeacherLogin;
