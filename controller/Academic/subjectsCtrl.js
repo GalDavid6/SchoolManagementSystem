@@ -102,7 +102,7 @@ exports.deleteSubject = AsyncHandler(async (req, res) =>{
     }
 
     res.status(201).json({
-        status: "Sucess",
+        status: "Success",
         message: "Subject deleted successfully",
     });
 });

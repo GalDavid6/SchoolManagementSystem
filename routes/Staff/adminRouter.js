@@ -16,40 +16,17 @@ const isLogin = require('../../middlewares/isLogin');
 const isAdmin = require('../../middlewares/isAdmin');
 const adminRouter = express.Router();
 
-// admin register
 adminRouter.post("/register",registerAdminCtrl);
-
-// admin login
 adminRouter.post("/login", loginAdminCtrl);
-
-// get all
-adminRouter.get("/", isLogin, isAdmin, getAdminsCtrl);
-
-// get profile
-adminRouter.get("/profile", isLogin, isAdmin, getAdminProfileCtrl);
-
-// update
-adminRouter.put("/", isLogin, isAdmin, updateAdminCtrl);
-
-// delete
 adminRouter.delete("/:id", deleteAdminCtrl);
-
-// suspend
-adminRouter.put("/suspend/teacher/:id", adminSuspendTeacherCtrl);
-
-//unsuspend
-adminRouter.put("/unsuspend/teacher/:id", adminUnSuspendTeacherCtrl);
-
-//withdraw
-adminRouter.put("/withdraw/teacher/:id", adminWithdrawTeacherCtrl);
-
-// unwithdraw
-adminRouter.put("/unwithdraw/teacher/:id", adminUnWithdrawTeacherCtrl);
-
-//publish
-adminRouter.put("/publish/exam/:id", adminPublishResults);
-
-//unpublish
-adminRouter.put("/unpublish/exam/:id", adminUnPublishResults);
+adminRouter.get("/", isLogin, isAdmin, getAdminsCtrl);
+adminRouter.get("/profile", isLogin, isAdmin, getAdminProfileCtrl);
+adminRouter.put("/", isLogin, isAdmin, updateAdminCtrl);
+adminRouter.put("/suspend/teacher/:id", isLogin, isAdmin, adminSuspendTeacherCtrl);
+adminRouter.put("/unsuspend/teacher/:id", isLogin, isAdmin, adminUnSuspendTeacherCtrl);
+adminRouter.put("/withdraw/teacher/:id", isLogin, isAdmin, adminWithdrawTeacherCtrl);
+adminRouter.put("/unwithdraw/teacher/:id", isLogin, isAdmin, adminUnWithdrawTeacherCtrl);
+adminRouter.put("/publish/exam/:id", isLogin, isAdmin, adminPublishResults);
+adminRouter.put("/unpublish/exam/:id", isLogin, isAdmin, adminUnPublishResults);
 
 module.exports = adminRouter;

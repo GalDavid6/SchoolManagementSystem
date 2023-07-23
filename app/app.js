@@ -4,13 +4,16 @@ const {
      notFoundErr,
      } = require('../middlewares/globalErrHandler');
 const adminRouter = require('../routes/Staff/adminRouter');
-const academicYearRouter = require("../routes/Academic/academicYear");
-const academicTermRouter = require('../routes/Academic/academicTerm');
-const classLevelRouter = require('../routes/Academic/classLevel');
-const programRouter = require('../routes/Academic/program');
-const subjectRouter = require('../routes/Academic/subject');
-const yearGroupRouter = require('../routes/Academic/yearGroup');
+const academicYearRouter = require("../routes/Academic/academicYearRouter");
+const academicTermRouter = require('../routes/Academic/academicTermRouter');
+const classLevelRouter = require('../routes/Academic/classLevelRouter');
+const programRouter = require('../routes/Academic/programRouter');
+const subjectRouter = require('../routes/Academic/subjectRouter');
+const yearGroupRouter = require('../routes/Academic/yearGroupRouter');
 const teacherRouter = require('../routes/Staff/teacherRouter');
+const examRouter = require('../routes/Academic/examRouter');
+const studentRouter = require('../routes/students/studentRouter');
+const questionsRouter = require('../routes/Academic/questionsRouter');
 
 const app = express();
 
@@ -25,6 +28,9 @@ app.use("/api/v1/programs", programRouter);
 app.use("/api/v1/subjects", subjectRouter);
 app.use("/api/v1/year-groups", yearGroupRouter);
 app.use("/api/v1/teachers", teacherRouter);
+app.use("/api/v1/exams", examRouter);
+app.use("/api/v1/students", studentRouter);
+app.use("/api/v1/questions", questionsRouter);
 
 // Error Middleware
 app.use(notFoundErr);
