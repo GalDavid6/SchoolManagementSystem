@@ -65,10 +65,41 @@ exports.loginTeacher = AsyncHandler(async (req, res) => {
 //@route GET /api/v1/teachers/admin
 //@access Private Admin only
 exports.getAllTeachersAdmin = AsyncHandler(async (req, res) => {
-    const teachers = await Teacher.find();
+    //creating mongo object
+    let TeachersQuery = Teacher.find({
+        name: { $regex: req.query.name, $options: "i"},
+    }); 
+    //convert query strings to number
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 2;
+    const skip = (page -1) * limit;
+    const total = await Teacher.countDocuments();
+    const startIndex = (page - 1) * limit;
+    const endIndex = page*limit;
+    //pagination resulst 
+    const pagination = {};
+    //add next
+    if (endIndex<total){
+        pagination.next = {
+            page: page+1,
+            limit,
+        };
+    }
+    //add previous
+    if (startIndex > 0){
+        pagination.prev = {
+            page: page-1,
+            limit,
+        };
+    }
+    //execute query
+    const teachers = await TeachersQuery.find().skip(skip).limit(limit);
     res.status(200).json({
         status: "Success",
         message: "Teachers fetched successfully",
+        total,
+        pagination,
+        results: teachers.length,
         data: teachers,
     });
 });
