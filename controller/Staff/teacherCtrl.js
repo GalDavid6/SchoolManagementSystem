@@ -66,9 +66,7 @@ exports.loginTeacher = AsyncHandler(async (req, res) => {
 //@access Private Admin only
 exports.getAllTeachersAdmin = AsyncHandler(async (req, res) => {
     //creating mongo object
-    let TeachersQuery = Teacher.find({
-        name: { $regex: req.query.name, $options: "i"},
-    }); 
+    let TeachersQuery = Teacher.find(); 
     //convert query strings to number
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 2;
@@ -76,6 +74,12 @@ exports.getAllTeachersAdmin = AsyncHandler(async (req, res) => {
     const total = await Teacher.countDocuments();
     const startIndex = (page - 1) * limit;
     const endIndex = page*limit;
+    //filtering, we are providing this if in case the user wont add to the query teacher name
+    if(req.query.name){
+        TeachersQuery = TeachersQuery.find({
+            name: { $regex: req.query.name, $options: "i"},
+        });
+    }
     //pagination resulst 
     const pagination = {};
     //add next
