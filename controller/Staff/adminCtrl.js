@@ -12,7 +12,7 @@ exports.registerAdminCtrl = AsyncHandler(async (req, res)=>{
     //Check if email exists
     const adminFound = await Admin.findOne({ email });
     if(adminFound){
-        res.json("Admin Exists");
+        throw new Error("Admin exists");
     }
     //register
     const user = await Admin.create({
@@ -67,7 +67,13 @@ exports.getAdminsCtrl = AsyncHandler(async (req, res)=>{
 exports.getAdminProfileCtrl = AsyncHandler(async (req, res)=>{
     const admin = await Admin.findById(req.userAuth._id)
         .select("-password -createdAt -updatedAt")
-        .populate("academicYears");
+        .populate("academicYears")
+        .populate("academicTerms")
+        .populate("programs")
+        .populate("yearGroups")
+        .populate("classLevels")
+        .populate("teachers")
+        .populate("students");
     if(!admin) {
         throw new Error("Admin not found");
     } else {
