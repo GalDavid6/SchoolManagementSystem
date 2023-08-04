@@ -9,21 +9,20 @@ const {
     adminUpdateStudent,
     writeExam, 
 } = require("../../controller/students/studentsCtrl");
-const isAdmin = require("../../middlewares/isAdmin");
-const isLogin = require("../../middlewares/isLogin");
-const isStudent = require("../../middlewares/isStudent");
-const isStudentLogin = require("../../middlewares/isStudentLogin");
-const { isValidObjectId } = require("mongoose");
+const isAuthenticated = require("../../middlewares/isAuthenticated");
+const Admin = require("../../model/Staff/Admin");
+const Student = require("../../model/Academic/Student");
+const roleRestriction = require("../../middlewares/roleRestriction");
 
 const studentRouter = express.Router();
 
-studentRouter.post("/admin/register", isLogin, isAdmin, adminRegisterStudent);
+studentRouter.post("/admin/register", isAuthenticated(Admin), roleRestriction('admin'), adminRegisterStudent);
 studentRouter.post("/login", loginStudent);
-studentRouter.get("/profile", isStudentLogin, isStudent, getStudentProfile);
-studentRouter.get("/admin", isLogin, isAdmin, getAllStudentsAdmin);
-studentRouter.get("/:studentID/admin", isLogin, isAdmin, getSingleStudentAdmin);
-studentRouter.put("/update", isStudentLogin, isStudent, updateStudent);
-studentRouter.put("/:studentID/update/admin", isLogin, isAdmin, adminUpdateStudent);
-studentRouter.post("/exam/:examID/write", isStudentLogin, isStudent, writeExam);
+studentRouter.get("/profile", isAuthenticated(Student), roleRestriction('student'), getStudentProfile);
+studentRouter.get("/admin", isAuthenticated(Admin), roleRestriction('admin'), getAllStudentsAdmin);
+studentRouter.get("/:studentID/admin", isAuthenticated(Admin), roleRestriction('admin'), getSingleStudentAdmin);
+studentRouter.put("/update", isAuthenticated(Student), roleRestriction('student'), updateStudent);
+studentRouter.put("/:studentID/update/admin", isAuthenticated(Admin), roleRestriction('admin'), adminUpdateStudent);
+studentRouter.post("/exam/:examID/write", isAuthenticated(Student), roleRestriction('student'), writeExam);
 
 module.exports = studentRouter;

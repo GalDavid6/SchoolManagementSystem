@@ -1,32 +1,35 @@
 const express = require('express');
-const { registerAdminCtrl,
-    loginAdminCtrl,
-    getAdminsCtrl,
-    getAdminProfileCtrl,        
-    updateAdminCtrl,
-    deleteAdminCtrl,
-    adminSuspendTeacherCtrl, 
-    adminUnSuspendTeacherCtrl,
-    adminWithdrawTeacherCtrl,
-    adminUnWithdrawTeacherCtrl,
+const { registerAdmin,
+    loginAdmin,
+    getAdmins,
+    getAdminProfile,        
+    updateAdmin,
+    deleteAdmin,
+    adminSuspendTeacher, 
+    adminUnSuspendTeacher,
+    adminWithdrawTeacher,
+    adminUnWithdrawTeacher,
     adminPublishResults,
     adminUnPublishResults,
 } = require('../../controller/Staff/adminCtrl');
-const isLogin = require('../../middlewares/isLogin');
-const isAdmin = require('../../middlewares/isAdmin');
+const advancedResults = require('../../middlewares/advancedResults');
+const Admin = require('../../model/Staff/Admin');
+const isAuthenticated = require('../../middlewares/isAuthenticated');
+const roleRestriction = require('../../middlewares/roleRestriction');
+
 const adminRouter = express.Router();
 
-adminRouter.post("/register",registerAdminCtrl);
-adminRouter.post("/login", loginAdminCtrl);
-adminRouter.delete("/:id", deleteAdminCtrl);
-adminRouter.get("/", isLogin, isAdmin, getAdminsCtrl);
-adminRouter.get("/profile", isLogin, isAdmin, getAdminProfileCtrl);
-adminRouter.put("/", isLogin, isAdmin, updateAdminCtrl);
-adminRouter.put("/suspend/teacher/:id", isLogin, isAdmin, adminSuspendTeacherCtrl);
-adminRouter.put("/unsuspend/teacher/:id", isLogin, isAdmin, adminUnSuspendTeacherCtrl);
-adminRouter.put("/withdraw/teacher/:id", isLogin, isAdmin, adminWithdrawTeacherCtrl);
-adminRouter.put("/unwithdraw/teacher/:id", isLogin, isAdmin, adminUnWithdrawTeacherCtrl);
-adminRouter.put("/publish/exam/:id", isLogin, isAdmin, adminPublishResults);
-adminRouter.put("/unpublish/exam/:id", isLogin, isAdmin, adminUnPublishResults);
+adminRouter.post("/register",registerAdmin);
+adminRouter.post("/login", loginAdmin);
+adminRouter.delete("/:id", deleteAdmin);
+adminRouter.get("/", isAuthenticated(Admin), roleRestriction('admin'), advancedResults(Admin), getAdmins);
+adminRouter.get("/profile", isAuthenticated(Admin), roleRestriction('admin'), getAdminProfile);
+adminRouter.put("/", isAuthenticated(Admin), roleRestriction('admin'), updateAdmin);
+adminRouter.put("/suspend/teacher/:id", isAuthenticated(Admin), roleRestriction('admin'), adminSuspendTeacher);
+adminRouter.put("/unsuspend/teacher/:id", isAuthenticated(Admin), roleRestriction('admin'), adminUnSuspendTeacher);
+adminRouter.put("/withdraw/teacher/:id", isAuthenticated(Admin), roleRestriction('admin'), adminWithdrawTeacher);
+adminRouter.put("/unwithdraw/teacher/:id", isAuthenticated(Admin), roleRestriction('admin'), adminUnWithdrawTeacher);
+adminRouter.put("/publish/exam/:id", isAuthenticated(Admin), roleRestriction('admin'), adminPublishResults);
+adminRouter.put("/unpublish/exam/:id", isAuthenticated(Admin), roleRestriction('admin'), adminUnPublishResults);
 
 module.exports = adminRouter;

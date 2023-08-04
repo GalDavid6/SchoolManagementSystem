@@ -1,8 +1,5 @@
 const AsyncHandler = require("express-async-handler");
-const isTeacher = require("../../middlewares/isTeacher");
-const isTeacherLogin = require("../../middlewares/isTeacherLogin");
 const Question = require("../../model/Academic/Questions");
-const Teacher = require("../../model/Staff/Teacher");
 const Exam = require("../../model/Academic/Exam");
 
 //@desc Create Questions

@@ -6,20 +6,21 @@ const {
     updateExam,
     deleteExam
 } = require("../../controller/Academic/examsCtrl");
-const isTeacher = require("../../middlewares/isTeacher");
-const isTeacherLogin = require("../../middlewares/isTeacherLogin");
+const isAuthenticated = require("../../middlewares/isAuthenticated");
+const Teacher = require("../../model/Staff/Teacher");
+const roleRestriction = require("../../middlewares/roleRestriction");
 
 const examRouter = express.Router();
 
 examRouter
 .route("/")
-.post(isTeacherLogin, isTeacher, createExam)
-.get(isTeacherLogin, isTeacher, getExams);
+.post(isAuthenticated(Teacher), roleRestriction('teacher'), createExam)
+.get(isAuthenticated(Teacher), roleRestriction('teacher'), getExams);
 
 examRouter
 .route("/:id")
-.get(isTeacherLogin, isTeacher, getExam)
-.put(isTeacherLogin, isTeacher, updateExam)
-.delete(isTeacherLogin, isTeacher, deleteExam);
+.get(isAuthenticated(Teacher), roleRestriction('teacher'), getExam)
+.put(isAuthenticated(Teacher), roleRestriction('teacher'), updateExam)
+.delete(isAuthenticated(Teacher), roleRestriction('teacher'), deleteExam);
 
 module.exports = examRouter; 

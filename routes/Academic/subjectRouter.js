@@ -1,6 +1,4 @@
 const express = require("express");
-const isAdmin = require("../../middlewares/isAdmin");
-const isLogin = require("../../middlewares/isLogin");
 const {
     createSubject,
     getSubjects,
@@ -8,13 +6,16 @@ const {
     updateSubject,
     deleteSubject
     } = require("../../controller/Academic/subjectsCtrl");
+const isAuthenticated = require("../../middlewares/isAuthenticated");
+const Admin = require("../../model/Staff/Admin");
+const roleRestriction = require("../../middlewares/roleRestriction");
 const subjectRouter = express.Router();
 
-subjectRouter.post('/:programID', isLogin, isAdmin, createSubject);
-subjectRouter.get("/", isLogin, isAdmin, getSubjects);
-subjectRouter.get("/:id", isLogin, isAdmin, getSubject);
-subjectRouter.put("/:id", isLogin, isAdmin, updateSubject);
-subjectRouter.delete("/:id", isLogin, isAdmin, deleteSubject);
+subjectRouter.post('/:programID', isAuthenticated(Admin), roleRestriction('admin'), createSubject);
+subjectRouter.get("/", isAuthenticated(Admin), roleRestriction('admin'), getSubjects);
+subjectRouter.get("/:id", isAuthenticated(Admin), roleRestriction('admin'), getSubject);
+subjectRouter.put("/:id", isAuthenticated(Admin), roleRestriction('admin'), updateSubject);
+subjectRouter.delete("/:id", isAuthenticated(Admin), roleRestriction('admin'), deleteSubject);
 
 
 

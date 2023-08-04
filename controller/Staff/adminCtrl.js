@@ -7,7 +7,7 @@ const { hashPassword, isPassMatched } = require("../../utills/helpers");
 //@desc Register admin
 //@route POST /api/admins/register
 //@access Private
-exports.registerAdminCtrl = AsyncHandler(async (req, res)=>{
+exports.registerAdmin = AsyncHandler(async (req, res)=>{
     const { name, email, password } = req.body;
     //Check if email exists
     const adminFound = await Admin.findOne({ email });
@@ -30,7 +30,7 @@ exports.registerAdminCtrl = AsyncHandler(async (req, res)=>{
 //@desc login admins
 //@route POST /api/admins/login
 //@access Private
-exports.loginAdminCtrl = AsyncHandler(async (req, res)=>{
+exports.loginAdmin = AsyncHandler(async (req, res)=>{
     const { name, email, password } = req.body;
         //find admin
         const admin = await Admin.findOne({ name, email });
@@ -52,19 +52,14 @@ exports.loginAdminCtrl = AsyncHandler(async (req, res)=>{
 //@desc get all admins
 //@route GET /api/admins
 //@access Private
-exports.getAdminsCtrl = AsyncHandler(async (req, res)=>{
-    const admins = await Admin.find();
-    res.status(200).json({
-        status: "Success",
-        message: "Admin fetched successfully",
-        data: admins,
-    });
+exports.getAdmins = AsyncHandler(async (req, res)=>{
+    res.status(200).json(res.results);
 });
 
 //@desc get single admin
 //@route GET /api/v1/admins/:id
 //@access Private
-exports.getAdminProfileCtrl = AsyncHandler(async (req, res)=>{
+exports.getAdminProfile = AsyncHandler(async (req, res)=>{
     const admin = await Admin.findById(req.userAuth._id)
         .select("-password -createdAt -updatedAt")
         .populate("academicYears")
@@ -83,12 +78,12 @@ exports.getAdminProfileCtrl = AsyncHandler(async (req, res)=>{
             message: "Admin profile fetched successfully",
         });
     }
-}) ;
+});
 
 //desc update admin
 //@route UPDATE /api/v1/admins/
 //@access Private
-exports.updateAdminCtrl = AsyncHandler(async (req, res)=>{
+exports.updateAdmin = AsyncHandler(async (req, res)=>{
     const { email, name, password } = req.body;
     //if email is taken
     const emailExist = await Admin.findOne({ email });
@@ -139,7 +134,7 @@ exports.updateAdminCtrl = AsyncHandler(async (req, res)=>{
 //@desc delete admin
 //@route DELETE /api/v1/admins/:id
 //@access Private
-exports.deleteAdminCtrl =  (req, res)=>{
+exports.deleteAdmin =  (req, res)=>{
     try{
         res.status(201).json({
             status: "success",
@@ -156,7 +151,7 @@ exports.deleteAdminCtrl =  (req, res)=>{
 //@desc suspend admin
 //@route PUT /api/v1/admins/suspend/teacher/:id
 //@access Private
-exports.adminSuspendTeacherCtrl = (req, res)=>{
+exports.adminSuspendTeacher = (req, res)=>{
     try{
         res.status(201).json({
             status: "success",
@@ -173,7 +168,7 @@ exports.adminSuspendTeacherCtrl = (req, res)=>{
 //@desc unsuspend admin
 //@route PUT /api/v1/admins/:id
 //@access Private
-exports.adminUnSuspendTeacherCtrl =  (req, res)=>{
+exports.adminUnSuspendTeacher =  (req, res)=>{
     try{
         res.status(201).json({
             status: "success",
@@ -190,7 +185,7 @@ exports.adminUnSuspendTeacherCtrl =  (req, res)=>{
 //@desc withdraw teacher
 //@route PUT /api/v1/admins/withdraw/teacher/:id
 //@access Private
-exports.adminWithdrawTeacherCtrl =  (req, res)=>{
+exports.adminWithdrawTeacher =  (req, res)=>{
     try{
         res.status(201).json({
             status: "success",
@@ -207,7 +202,7 @@ exports.adminWithdrawTeacherCtrl =  (req, res)=>{
 //@desc unwithdraw teacher
 //@route PUT /api/v1/admins/unwithdraw/teacher/:id
 //@access Private
-exports.adminUnWithdrawTeacherCtrl = (req, res)=>{
+exports.adminUnWithdrawTeacher = (req, res)=>{
     try{
         res.status(201).json({
             status: "success",

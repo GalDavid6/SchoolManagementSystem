@@ -1,6 +1,4 @@
 const express = require("express");
-const isAdmin = require("../../middlewares/isAdmin");
-const isLogin = require("../../middlewares/isLogin");
 const {
      createAcademicTerm,
      getAcademicTerm,
@@ -8,17 +6,20 @@ const {
      updateAcademicTerm,   
      deleteAcademicTerm
      } = require("../../controller/Academic/academicTermCtrl");
+const isAuthenticated = require("../../middlewares/isAuthenticated");
+const Admin = require("../../model/Staff/Admin");
+const roleRestriction = require("../../middlewares/roleRestriction");
 const academicTermRouter = express.Router();
 
 academicTermRouter
     .route("/")
-    .post(isLogin, isAdmin, createAcademicTerm)
-    .get(isLogin, isAdmin, getAcademicTerms);
+    .post(isAuthenticated(Admin), roleRestriction('admin'), createAcademicTerm)
+    .get(isAuthenticated(Admin), roleRestriction('admin'), getAcademicTerms);
 
 academicTermRouter
     .route("/:id")
-    .get(isLogin, isAdmin, getAcademicTerm)
-    .put(isLogin, isAdmin, updateAcademicTerm)
-    .delete(isLogin, isAdmin, deleteAcademicTerm);
+    .get(isAuthenticated(Admin), roleRestriction('admin'), getAcademicTerm)
+    .put(isAuthenticated(Admin), roleRestriction('admin'), updateAcademicTerm)
+    .delete(isAuthenticated(Admin), roleRestriction('admin'), deleteAcademicTerm);
 
 module.exports = academicTermRouter;

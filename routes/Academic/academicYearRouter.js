@@ -6,19 +6,20 @@ const {
     updateAcademicYear,
     deleteAcademicYear
     } = require("../../controller/Academic/academicYearCtrl");
-const isAdmin = require("../../middlewares/isAdmin");
-const isLogin = require("../../middlewares/isLogin");
+const isAuthenticated = require("../../middlewares/isAuthenticated");
+const Admin = require("../../model/Staff/Admin");
+const roleRestriction = require("../../middlewares/roleRestriction");
 const academicYearRouter = express.Router();
 
 academicYearRouter
     .route("/")
-    .post(isLogin, isAdmin, createAcademicYear)
-    .get(isLogin, isAdmin, getAcademicYears);
+    .post(isAuthenticated(Admin), roleRestriction('admin'), createAcademicYear)
+    .get(isAuthenticated(Admin), roleRestriction('admin'), getAcademicYears);
 
 academicYearRouter
     .route("/:id")
-    .get(isLogin, isAdmin, getAcademicYear)
-    .put(isLogin, isAdmin, updateAcademicYear)
-    .delete(isLogin, isAdmin, deleteAcademicYear);
+    .get(isAuthenticated(Admin), roleRestriction('admin'), getAcademicYear)
+    .put(isAuthenticated(Admin), roleRestriction('admin'), updateAcademicYear)
+    .delete(isAuthenticated(Admin), roleRestriction('admin'), deleteAcademicYear);
 
 module.exports = academicYearRouter;
