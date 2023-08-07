@@ -2,7 +2,8 @@ const AsyncHandler = require("express-async-handler");
 const Admin = require("../../model/Staff/Admin");
 const generateToken = require("../../utills/generateToken");
 const { hashPassword, isPassMatched } = require("../../utills/helpers");
-
+const Teacher = require("../../model/Staff/Teacher");
+const ExamResult = require("../../model/Academic/ExamResults");
 
 //@desc Register admin
 //@route POST /api/admins/register
@@ -131,121 +132,77 @@ exports.updateAdmin = AsyncHandler(async (req, res)=>{
     }
 });
 
-//@desc delete admin
-//@route DELETE /api/v1/admins/:id
-//@access Private
-exports.deleteAdmin =  (req, res)=>{
-    try{
-        res.status(201).json({
-            status: "success",
-            data: "delete admin",
-        });
-    } catch(error){
-        res.json({
-            status: "failed",
-            error: error.message,
-        });
+//@desc Admin Toggle suspend on teacher
+//@route PUT /api/v1/admins/toggle-suspend/teacher/:id
+//@access Private Admin Only
+exports.adminToggleSuspendTeacher = AsyncHandler(async (req, res) => {
+    //find teacher result
+    const teacher = await Teacher.findById(req.params.id);
+    if(!teacher) {
+        throw new Error("Teacher not found");
     }
-};
+    const suspendTeacher = await Teacher.findByIdAndUpdate(
+        req.params.id,
+        {
+        isSuspended: req.body.suspend,
+        },
+        {
+            new: true,
+        }
+    );
+    res.status(200).json({
+        status: "Success",
+        message: "Teacher suspend or unsuspend",
+        data: suspendTeacher,
+    });
+});
 
-//@desc suspend admin
-//@route PUT /api/v1/admins/suspend/teacher/:id
-//@access Private
-exports.adminSuspendTeacher = (req, res)=>{
-    try{
-        res.status(201).json({
-            status: "success",
-            data: "Admin suspend teacher",
-        });
-    } catch(error){
-        res.json({
-            status: "failed",
-            error: error.message,
-        });
+//@desc Admin Toggle Teacher Withdraw
+//@route PUT /api/v1/admins/toggle-withdraw/teacher/:id
+//@access Private Admin Only
+exports.adminToggleWithdrawTeacher = AsyncHandler(async (req, res) => {
+    //find teacher result
+    const teacher = await Teacher.findById(req.params.id);
+    if(!teacher) {
+        throw new Error("Teacher not found");
     }
-};
+    const withdrawnTeacher = await Teacher.findByIdAndUpdate(
+        req.params.id,
+        {
+            isWitdrawn: req.body.withdraw,
+        },
+        {
+            new: true,
+        }
+    );
+    res.status(200).json({
+        status: "Success",
+        message: "Teacher withdrawn or unwithdrawn",
+        data: withdrawnTeacher,
+    });
+});
 
-//@desc unsuspend admin
-//@route PUT /api/v1/admins/:id
-//@access Private
-exports.adminUnSuspendTeacher =  (req, res)=>{
-    try{
-        res.status(201).json({
-            status: "success",
-            data: "Admin unsuspend teacher",
-        });
-    } catch(error){
-        res.json({
-            status: "failed",
-            error: error.message,
-        });
+//@desc Admin Toggle publish exam results
+//@route PUT /api/v1/admins/toggle-publish/exam/:id
+//@access Private Admin Only
+exports.adminToggleExamResult = AsyncHandler(async (req, res) => {
+    //find exam result
+    const examResult = await ExamResult.findById(req.params.id);
+    if(!examResult) {
+        throw new Error("Exam result not found");
     }
-};
-
-//@desc withdraw teacher
-//@route PUT /api/v1/admins/withdraw/teacher/:id
-//@access Private
-exports.adminWithdrawTeacher =  (req, res)=>{
-    try{
-        res.status(201).json({
-            status: "success",
-            data: "Admin withdraw teacher",
-        });
-    } catch(error){
-        res.json({
-            status: "failed",
-            error: error.message,
-        });
-    }
-}
-
-//@desc unwithdraw teacher
-//@route PUT /api/v1/admins/unwithdraw/teacher/:id
-//@access Private
-exports.adminUnWithdrawTeacher = (req, res)=>{
-    try{
-        res.status(201).json({
-            status: "success",
-            data: "Admin unwithdraw teacher",
-        });
-    } catch(error){
-        res.json({
-            status: "failed",
-            error: error.message,
-        });
-    }
-};
-
-//@desc publish exam
-//@route PUT /api/v1/admins/publish/exam/:id
-//@access Private
-exports.adminPublishResults = (req, res)=>{
-    try{
-        res.status(201).json({
-            status: "success",
-            data: "Admin publish exam",
-        });
-    } catch(error){
-        res.json({
-            status: "failed",
-            error: error.message,
-        });
-    }
-}; 
-
-//@desc unpublish exam
-//@route PUT /api/v1/admins/unpublish/exam/:id
-//@access Private
-exports.adminUnPublishResults = (req, res)=>{
-    try{
-        res.status(201).json({
-            status: "success",
-            data: "Admin unpublish exam",
-        });
-    } catch(error){
-        res.json({
-            status: "failed",
-            error: error.message,
-        });
-    }
-};
+    const publishResult = await ExamResult.findByIdAndUpdate(
+        req.params.id,
+        {
+        isPublished: req.body.publish,
+        },
+        {
+            new: true,
+        }
+    );
+    res.status(200).json({
+        status: "Success",
+        message: "Exam results publish or unpublish",
+        data: publishResult,
+    });
+});

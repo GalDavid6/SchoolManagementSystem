@@ -7,8 +7,8 @@ const globalErrHandler = (err, req, res, next) => {
         status,
         message,
         stack,
-    })
-}
+    });
+};
 
 const notFoundErr = (req, res, next) =>{
     const err = new Error(`Can't find ${req.originalUrl} on the server`);

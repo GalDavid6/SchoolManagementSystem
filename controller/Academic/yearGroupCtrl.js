@@ -40,13 +40,7 @@ exports.createYearGroup = AsyncHandler(async (req, res) => {
 //@route GET /api/v1/year-groups
 //@acess Private
 exports.getYearGroups = AsyncHandler(async (req, res) => {
-    const yearGroups = await YearGroup.find();
-
-    res.status(201).json({
-        status: "Success",
-        message: "Year Groups fetched successfully",
-        data: yearGroups,
-    });
+    res.status(201).json(res.results);
 });
 
 //desc Get Single Year Group

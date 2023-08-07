@@ -35,13 +35,7 @@ exports.createProgram = AsyncHandler(async (req, res) => {
 //@route GET /api/v1/programs
 //@acess Private
 exports.getPrograms = AsyncHandler(async (req, res) => {
-    const programs = await Program.find();
-
-    res.status(201).json({
-        status: "Success",
-        message: "Programs fetched successfully",
-        data: programs,
-    });
+    res.status(201).json(res.results);
 });
 
 //desc Get Single Program

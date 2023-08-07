@@ -35,13 +35,7 @@ exports.createAcademicTerm = AsyncHandler(async (req, res) => {
 //@route GET /api/v1/academic-terms
 //@acess Private
 exports.getAcademicTerms = AsyncHandler(async (req, res) => {
-    const academicTerms = await AcademicTerm.find();
-
-    res.status(201).json({
-        status: "Success",
-        message: "Academic terms fetched successfully",
-        data: academicTerms,
-    });
+    res.status(200).json(res.results);
 });
 
 //desc Get Single Academic Term

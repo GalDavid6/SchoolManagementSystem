@@ -39,13 +39,7 @@ exports.createSubject = AsyncHandler(async (req, res) => {
 //@route GET /api/v1/subjects
 //@acess Private
 exports.getSubjects = AsyncHandler(async (req, res) => {
-    const subjects = await Subject.find();
-
-    res.status(201).json({
-        status: "Success",
-        message: "Subjects fetched successfully",
-        data: subjects,
-    });
+    res.status(201).json(res.results);
 });
 
 //desc Get Single Subject

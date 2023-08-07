@@ -67,12 +67,7 @@ exports.loginStudent = AsyncHandler(async (req, res) => {
 //@route GET /api/v1/students/admin
 //@access Private Admin only
 exports.getAllStudentsAdmin = AsyncHandler(async (req, res) => {
-    const students = await Student.find();
-    res.status(200).json({
-        status: "Success",
-        message: "Students fetched successfully",
-        data: students,
-    });
+    res.status(200).json(res.results);
 });
 
 //@desc Get Single Student

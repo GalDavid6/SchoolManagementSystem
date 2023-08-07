@@ -9,12 +9,14 @@ const {
 const isAuthenticated = require("../../middlewares/isAuthenticated");
 const Admin = require("../../model/Staff/Admin");
 const roleRestriction = require("../../middlewares/roleRestriction");
+const advancedResults = require("../../middlewares/advancedResults");
+const YearGroup = require("../../model/Academic/YearGroup");
 const yearGroupRouter = express.Router();
 
 yearGroupRouter
     .route("/")
     .post(isAuthenticated(Admin), roleRestriction('admin'), createYearGroup)
-    .get(isAuthenticated(Admin), roleRestriction('admin'), getYearGroups);
+    .get(isAuthenticated(Admin), roleRestriction('admin'), advancedResults(YearGroup), getYearGroups);
 
 yearGroupRouter
     .route("/:id")

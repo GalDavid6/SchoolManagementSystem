@@ -36,13 +36,7 @@ exports.createAcademicYear = AsyncHandler(async (req, res) => {
 //@route GET /api/v1/academic-years
 //@acess Private
 exports.getAcademicYears = AsyncHandler(async (req, res) => {
-    const academicYears = await AcademicYear.find();
-
-    res.status(201).json({
-        status: "Success",
-        message: "Academic years fetched successfully",
-        data: academicYears,
-    });
+    res.status(201).json(res.results);
 });
 
 //desc Get Single Academic Year

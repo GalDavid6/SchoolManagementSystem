@@ -9,13 +9,15 @@ const {
 const isAuthenticated = require("../../middlewares/isAuthenticated");
 const Admin = require("../../model/Staff/Admin");
 const roleRestriction = require("../../middlewares/roleRestriction");
+const advancedResults = require("../../middlewares/advancedResults");
+const ClassLevel = require("../../model/Academic/ClassLevel");
 
 const classLevelRouter = express.Router();
 
 classLevelRouter
     .route("/")
     .post(isAuthenticated(Admin), roleRestriction('admin'), createClassLevel)
-    .get(isAuthenticated(Admin), roleRestriction('admin'), getClassLevels);
+    .get(isAuthenticated(Admin), roleRestriction('admin'),advancedResults(ClassLevel), getClassLevels);
 
 classLevelRouter
     .route("/:id")

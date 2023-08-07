@@ -63,17 +63,7 @@ exports.createExam = AsyncHandler(async (req, res) => {
 //@route GET /api/v1/exams
 //@acess Private
 exports.getExams = AsyncHandler(async (req, res) => {
-    const exams = await Exam.find().populate({
-        path: 'questions',
-        populate: {
-            path: "createdBy",
-        },
-    });
-    res.status(201).json({
-        status: "Success",
-        message: "Exams fetched successfully",
-        data: exams,
-    });
+    res.status(201).json(res.results);
 });
 
 //desc Get Single Exam

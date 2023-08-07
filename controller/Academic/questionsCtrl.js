@@ -48,12 +48,7 @@ exports.createQuestion = AsyncHandler(async (req, res) => {
 //@route GET /api/v1/questions
 //@access Private Teacher Only
 exports.getQuestions = AsyncHandler(async (req, res) => {
-    const questions = await Question.find();
-    res.status(201).json({
-        status: "Success",
-        message: "Questions fetched successfully",
-        data: questions,
-    });
+    res.status(201).json(res.results);
 });
 
 //@desc Get Single Question

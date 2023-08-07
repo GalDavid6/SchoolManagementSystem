@@ -42,12 +42,7 @@ exports.checkExamResult = AsyncHandler(async (req, res) => {
 //@route GET /api/v1/exam-results
 //@access Private Student Only
 exports.getAllExamsResults = AsyncHandler(async (req, res) => {
-    const results = await ExamResult.find().select("exam").populate("exam");
-    res.status(200).json({
-        status: "Success",
-        message: "Exam results fetched",
-        data: results,
-    });
+    res.status(200).json(res.results);
 });
 
 //@desc Admin publish exam results
